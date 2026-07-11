@@ -5,7 +5,7 @@ This app checks your computer's security.
 ## suported OS
 * Windows 10 (22H2 or later)
 * Windows 11 
-##Project plan
+## Project plan
 1. Add some checks
     a.Firewall
     b.UAC
