@@ -144,8 +144,12 @@ fn run_scan(){
     };
 
     //total score
-    let total_score: f64 = ((scores.uac) as f64 / max_score as f64) * 100_f64;
-    print!("total score: {}", total_score)
+    let total_score: f64 = if max_score != 0 {
+        ((scores.uac) as f64 / max_score as f64) * 100_f64
+    }else {
+        0.0
+    };
+    println!("--- Total score: {:.2}/100 ---", total_score);
 
 }
 
