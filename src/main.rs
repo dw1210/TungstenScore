@@ -1,7 +1,10 @@
 use std::io;
 use std::io::Write;
+use winreg::RegKey;
+use winreg::enums::*;
 
-const VERSION: &str = "v0.1.0";
+const APP_VERSION: &str = "v0.2.0";
+const SCORE_SYSTEM_VERSION: &str = "v0.1.0";
 
 enum MenuOption{
     Scan,
@@ -9,11 +12,19 @@ enum MenuOption{
     Exit,
 }
 
+enum UacStatus{
+    Enabled,
+    Disabled,
+    Unknown,
+}
+
+struct ScanScore{
+    uac: i32,
+}
+
 fn main() {
     print_welcome();
     loop{
-        
-
         match select_option() {
             MenuOption::Scan => run_scan(),
             MenuOption::About => print_about(),
@@ -26,16 +37,26 @@ fn print_welcome(){
     println!(
         r#"
 ===========================
-   TungstenScore {VERSION}
+   TungstenScore {APP_VERSION}
 Windows Security Assessment
 ===========================
         "#
     );
 }
 
+fn _exit_program(is_err: bool, msg: &str, code: i32) -> !{
+    if !is_err{
+        println!("{}", msg);
+    }else{
+        eprintln!("{}", msg);
+    }
+    std::process::exit(code);
+}
+
+
 fn select_option() -> MenuOption{
     loop{
-        println!("---Menu---");
+        println!("\n\n---Menu---");
         println!("1.Scan");
         println!("2.About");
         println!("3.Exit");
@@ -67,14 +88,64 @@ Language:
     Rust
 Description:
     Windows Security Assessment Tool
-Version:
-    {VERSION}
+App version:
+    {APP_VERSION}
+Score system version:
+    {SCORE_SYSTEM_VERSION}
 License:
-    MIT Licence
+    MIT License
     "#);
 }
 
+fn check_uac() -> UacStatus{
+    let hklm = RegKey::predef(HKEY_LOCAL_MACHINE);
+
+    let key = match hklm.open_subkey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"){
+        Ok(key) => key,
+        Err(_) => return UacStatus::Unknown,
+    };
+
+    let enable_lua: u32 = match key.get_value("EnableLUA"){
+        Ok(value) => value,
+        Err(_) => return UacStatus::Unknown,
+    };
+
+    match enable_lua {
+        1 => UacStatus::Enabled,
+        0 => UacStatus::Disabled,
+        _ => UacStatus::Unknown,
+    }
+
+}
+
 fn run_scan(){
-    todo!("run scan");
+    println!("\nScan Started.\n");
+    let mut max_score = 0;
+    let mut scores = ScanScore{
+        uac: 20,
+    };
+
+    //uac
+    scores.uac = match check_uac() {
+        UacStatus::Enabled => {
+            max_score += 20;
+            println!("UAC: Enabled [+20]");
+            20
+        },
+        UacStatus::Disabled => {
+            max_score += 20;
+            println!("UAC: disabled [!]");
+            0
+        },
+        UacStatus::Unknown => {
+            println!("UAC: Unknown [N/A]");
+            0
+        },
+    };
+
+    //total score
+    let total_score: f64 = ((scores.uac) as f64 / max_score as f64) * 100_f64;
+    print!("total score: {}", total_score)
+
 }
 
