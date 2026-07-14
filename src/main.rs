@@ -3,7 +3,7 @@ use std::io::Write;
 use winreg::RegKey;
 use winreg::enums::*;
 
-const APP_VERSION: &str = "v0.2.0";
+const APP_VERSION: &str = "v0.2.1";
 const SCORE_SYSTEM_VERSION: &str = "v0.1.0";
 
 enum MenuOption{
@@ -94,6 +94,8 @@ Score system version:
     {SCORE_SYSTEM_VERSION}
 License:
     MIT License
+Third-party licenses:
+    Third-party licenses are included in THIRD_PARTY.html.
     "#);
 }
 
