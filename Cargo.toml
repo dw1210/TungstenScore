@@ -1,8 +1,17 @@
 [package]
 name = "tungsten_score"
-version = "0.2.1"
+version = "0.3.0"
 edition = "2024"
+
+Description = "Windows Security Assessment Tool"
 license = "MIT"
+repository = "https://github.com/dw1210/TungstenScore"
+homepage = "https://dw1210.github.io/TungstenScore-website/"
+
+authors = ["dw1210 <mail@triplecolons.dev>"]
+
+rust-version = "1.88"
 
 [dependencies]
 winreg = "0.52"
+windows_firewall = "0.7"

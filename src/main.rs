@@ -2,9 +2,14 @@ use std::io;
 use std::io::Write;
 use winreg::RegKey;
 use winreg::enums::*;
+use windows_firewall::{get_firewall_state, Profile};
 
-const APP_VERSION: &str = "v0.2.1";
-const SCORE_SYSTEM_VERSION: &str = "v0.1.0";
+const APP_VERSION: &str = "v0.3.0";
+const SCORE_SYSTEM_VERSION: &str = "v0.2.0";
+const FIREWALL_PROFILES: [Profile; 2] = [
+    Profile::Private,
+    Profile::Public,
+];
 
 enum MenuOption{
     Scan,
@@ -17,9 +22,24 @@ enum UacStatus{
     Disabled,
     Unknown,
 }
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+enum FirewallProfileStatus{
+    Enabled,
+    Disabled,
+    Unknown,
+}
+
+enum FirewallStatus{
+    Enabled,
+    PartiallyEnabled,
+    Disabled,
+    Unknown,
+}
+
 
 struct ScanScore{
     uac: i32,
+    firewall: i32
 }
 
 fn main() {
@@ -96,6 +116,8 @@ License:
     MIT License
 Third-party licenses:
     Third-party licenses are included in THIRD_PARTY.html.
+Repository:
+    https://github.com/dw1210/TungstenScore
     "#);
 }
 
@@ -120,11 +142,43 @@ fn check_uac() -> UacStatus{
 
 }
 
+fn check_firewall() -> FirewallStatus{
+    let mut firewall_profile_status: [FirewallProfileStatus; 2] = [const {FirewallProfileStatus::Unknown}; 2];
+    let mut profile_count: usize = 0;
+    for profile in FIREWALL_PROFILES {
+        if profile_count >= 2{
+            break;
+        }
+        firewall_profile_status[profile_count] = match get_firewall_state(profile){
+            Ok(true) => FirewallProfileStatus::Enabled,
+            Ok(false) => FirewallProfileStatus::Disabled,
+            Err(_) => FirewallProfileStatus::Unknown, 
+        };
+        profile_count += 1;
+    }
+
+    if firewall_profile_status.iter().all(|&x| firewall_profile_status[0] == x){
+        if firewall_profile_status[0] == FirewallProfileStatus::Enabled{
+            FirewallStatus::Enabled
+        }else if firewall_profile_status[0] == FirewallProfileStatus::Disabled {
+            FirewallStatus::Disabled
+        }else{
+            FirewallStatus::Unknown
+        }
+    }else if !firewall_profile_status.contains(&FirewallProfileStatus::Unknown){
+        FirewallStatus::PartiallyEnabled
+    }else{
+        FirewallStatus::Unknown
+    }
+    
+}
+
 fn run_scan(){
     println!("\nScan Started.\n");
     let mut max_score = 0;
     let mut scores = ScanScore{
         uac: 20,
+        firewall: 20,
     };
 
     //uac
@@ -145,9 +199,31 @@ fn run_scan(){
         },
     };
 
+    scores.firewall = match check_firewall() {
+        FirewallStatus::Enabled => {
+            max_score += 20;
+            println!("Firewall: Enabled [+20]");
+            20
+        },
+        FirewallStatus::PartiallyEnabled => {
+            max_score += 20;
+            println!("Firewall: partially enabled [+10]");
+            10
+        }
+        FirewallStatus::Disabled => {
+            max_score += 20;
+            println!("Firewall: disabled [+0]");
+            0
+        },
+        FirewallStatus::Unknown => {
+            println!("Firewall: Unknown [N/A]");
+            0
+        },
+    };
+
     //total score
     let total_score: f64 = if max_score != 0 {
-        ((scores.uac) as f64 / max_score as f64) * 100_f64
+        ((scores.uac + scores.firewall) as f64 / max_score as f64) * 100_f64
     }else {
         0.0
     };
