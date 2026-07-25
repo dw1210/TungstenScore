@@ -125,7 +125,7 @@ dependencies = [
 
 [[package]]
 name = "tungsten_score"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "windows_firewall",
  "winreg",
