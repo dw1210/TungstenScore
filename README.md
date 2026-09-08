@@ -3,7 +3,7 @@ Windows Security Assessment Tool built with Rust
 
 ---
 
-<img width="708" height="721" alt="스크린샷 2026-07-12 134220" src="https://github.com/user-attachments/assets/4213f82d-d6ec-440f-a497-53f79cd7fbc2" />
+<img width="735" height="995" alt="image" src="https://github.com/user-attachments/assets/0a437db6-915c-4733-9619-68cb7369d063" />
 
 ## Quick start
 

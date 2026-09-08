@@ -1,5 +1,5 @@
-pub const APP_VERSION: &str = "v0.4.0";
-pub const SCORING_SYSTEM_VERSION: &str = "v0.2.1";
+pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
+pub const SCORING_SYSTEM_VERSION: &str = "v0.3.0";
 
 pub enum MenuOption{
     Scan,
@@ -12,6 +12,7 @@ pub enum CheckStatus{
     Enabled,
     PartiallyEnabled,
     Disabled,
+    RequiresAdmin,
     Unknown,
 }
 
@@ -21,6 +22,7 @@ impl CheckStatus{
             CheckStatus::Enabled => "Enabled".to_string(),
             CheckStatus::PartiallyEnabled => "Partially Enabled".to_string(),
             CheckStatus::Disabled => "Disabled".to_string(),
+            CheckStatus::RequiresAdmin => "Requires administrator privileges".to_string(),
             CheckStatus::Unknown => "Unknown".to_string(),
         }
     }
