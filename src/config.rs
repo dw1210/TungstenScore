@@ -1,5 +1,5 @@
 pub const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
-pub const SCORING_SYSTEM_VERSION: &str = "v0.3.0";
+pub const SCORING_SYSTEM_VERSION: &str = "v0.3.1";
 
 pub enum MenuOption{
     Scan,

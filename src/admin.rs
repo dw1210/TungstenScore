@@ -2,7 +2,6 @@ use std::process::Command;
 use crate::ui::*;
 
 fn restart_as_admin() -> Result<(), std::io::Error>{
-
     
     let exe = match std::env::current_exe(){
         Ok(exe) => exe,

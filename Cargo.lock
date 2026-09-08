@@ -418,7 +418,7 @@ dependencies = [
 
 [[package]]
 name = "tungsten_score"
-version = "0.5.0"
+version = "0.5.1"
 dependencies = [
  "is_elevated",
  "serde",

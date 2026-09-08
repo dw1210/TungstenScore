@@ -1,6 +1,6 @@
 [package]
 name = "tungsten_score"
-version = "0.5.0"
+version = "0.5.1"
 edition = "2024"
 
 description = "Windows Security Assessment Tool"

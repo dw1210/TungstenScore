@@ -15,7 +15,7 @@ pub fn run_scan()-> ScanSummary{
         tpm20_result,
     ];
 
-    let total_max_score: u32 = results.iter().map(|result| result.score).sum();
+    let total_max_score: u32 = results.iter().map(|result| result.max_score).sum();
     let total_score: u32 = results.iter().map(|result| result.score).sum();
 
     ScanSummary{
