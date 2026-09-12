@@ -5,33 +5,31 @@ Windows Security Assessment Tool built with Rust
 
 <img width="735" height="995" alt="image" src="https://github.com/user-attachments/assets/0a437db6-915c-4733-9619-68cb7369d063" />
 
-
 ## Quick start
 
 ### Prerequisites
 * Rust / [cargo](https://doc.rust-lang.org/stable/book/ch01-01-installation.html#installation) (1.88.0 or later)
-* Windows PowerShell
+* Windows 10 (22H2+) or **Windows 11 (recommeㅜded)**
 
 ### Instructions
-**Download or clone** the source code, navigate to the directory, and **run the following command**:
 
-```
+[Download the .exe file!](https://dw1210.github.io/TungstenScore-website/tungsten_score_v0-5-1.zip)
+
+**or**
+
+Download or clone the source code, navigate to the directory, and **run the following command**:
+
+```powershell
+# Download or clone the source code!
+git clone https://github.com/dw1210/TungstenScore.git
+# Navigate to the directory!
+cd Tungstenscore
+# Build and run!
 cargo run
 ```
 
-## Supported OS
-* Windows 10 (**22H2 or later**)
-* Windows 11
-
-## Features
-* **User Account Control (UAC) Verification**: Instantly checks and reports the current UAC status and elevation policies on Windows.
-* **Lightweight & Standalone**: Built entirely in Rust, requiring no heavy external runtimes or dependencies.
-* **Fast Execution**: Blazing fast security assessment optimized for PowerShell environments.
-
 ## Project plan
 1. Expand security checks
-   * Firewall configurations
-   * UAC
    * Windows version verification
    * Additional checks as needed
 2. Add an auto-fix feature
@@ -42,6 +40,13 @@ cargo run
 [https://dw1210.github.io/TungstenScore-website/](https://dw1210.github.io/TungstenScore-website/)
 
 ## How it works
-Unlike traditional scripts that rely on external interpreters, **TungstenScore** is compiled into a standalone native binary using Rust.
+* No installation required
+* Works offline
+* Reads the Windows Registry
+* Some checks require administrator permissions
+* Runs in the CLI
+* This app doesn't include many checks yet, but you can add checks in `src/checks`. 
 
-* **Zero Dependencies**: The tool runs instantly as a standalone binary without requiring any pre-installed runtime or environment.
+
+## This project is one of Hack Club Stardance Projects!
+Visit [stardance.hackclub.com/projects/32022](https://stardance.hackclub.com/projects/32022)
